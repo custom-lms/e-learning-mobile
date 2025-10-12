@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "Edu1",
+    "slug": "Edu1",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo-green.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/logo-green.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo-green.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.jd1441.Edu1"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "630ecabe-3025-467d-b070-d295f3414627"
+      }
+    },
+    "owner": "jd1441"
+  }
+}
