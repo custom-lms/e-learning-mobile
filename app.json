@@ -30,6 +30,9 @@
         "projectId": "630ecabe-3025-467d-b070-d295f3414627"
       }
     },
-    "owner": "jd1441"
+    "owner": "jd1441",
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

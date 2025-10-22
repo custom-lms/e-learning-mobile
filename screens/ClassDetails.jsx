@@ -339,6 +339,7 @@ export default function ClassDetails() {
 
               <TextInput
                 placeholder="Full Name"
+                placeholderTextColor="#888"
                 style={styles.input}
                 value={formData.fullName}
                 onChangeText={(text) => setFormData({ ...formData, fullName: text })}
@@ -347,6 +348,7 @@ export default function ClassDetails() {
 
               <TextInput
                 placeholder="Email Address"
+                placeholderTextColor="#888"
                 keyboardType="email-address"
                 autoCapitalize="none"
                 style={styles.input}
@@ -357,6 +359,7 @@ export default function ClassDetails() {
 
               <TextInput
                 placeholder="Mobile Number"
+                placeholderTextColor="#888"
                 keyboardType="phone-pad"
                 style={styles.input}
                 value={formData.mobile}
@@ -366,6 +369,7 @@ export default function ClassDetails() {
 
               <TextInput
                 placeholder="Pincode"
+                placeholderTextColor="#888"
                 keyboardType="numeric"
                 style={styles.input}
                 value={formData.pincode}
@@ -375,6 +379,7 @@ export default function ClassDetails() {
 
               <TextInput
                 placeholder="School Name (Optional)"
+                placeholderTextColor="#888"
                 style={styles.input}
                 value={formData.school}
                 onChangeText={(text) => setFormData({ ...formData, school: text })}
@@ -656,7 +661,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 8,
     borderRadius: 5,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff',   
+    color: '#000' 
   },
   error: {
     color: 'red',

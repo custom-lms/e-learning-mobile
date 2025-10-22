@@ -126,7 +126,7 @@ export default function PaymentScreen({ route, navigation }) {
         description: 'Order Payment',
         image: 'https://your-logo-url.com/logo.png', // Optional
         currency: 'INR',
-        key: 'rzp_test_RSDOFFdmXopOhR', // ⚠️ from Razorpay Dashboard
+        key: 'rzp_test_RWSr8luH5gRlNF', // ⚠️ from Razorpay Dashboard
         amount: order.amount,
         order_id: order.id,
         name: 'Your App Name',
