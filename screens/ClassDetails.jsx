@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -23,6 +23,7 @@ import { FontAwesome } from '@expo/vector-icons'; // for graduation cap icon
 import FeatureGrid from '../components/FeatureGrid';
 import BannerSection from '../components/Banner';
 import DemoVideos from '../components/DemoVideos';
+import { AuthContext } from '../context/AuthContext';
   
 // Function to convert numbers to Roman numerals
 const toRoman = (num) => {
@@ -54,6 +55,7 @@ export default function ClassDetails() {
 
   const route = useRoute();
   const navigation = useNavigation(); 
+  const { user } = useContext(AuthContext);
 
   const { classId, className } = route.params;
   const romanClass = toRoman(className.replace(/\D/g, ''));
@@ -191,6 +193,17 @@ export default function ClassDetails() {
     fetchSubjectsById(selectedBoard);
   };
 
+  const handleStartLearning = () => {
+    if (user && user.email) {
+      // ✅ User is logged in
+      setShowFormModal(true);
+    } else {
+      // ❌ User not logged in
+      navigation.navigate("Account");
+    }
+  };
+
+
   const coreSubjects = subjects.filter((subject) => subject.subjectType === 'CORE');
   const electiveSubjects = subjects.filter((subject) => subject.subjectType === 'ELECTIVE');
 
@@ -234,7 +247,7 @@ export default function ClassDetails() {
           title="Master Classroom"
           subtitle={className?.toUpperCase()}
           description="Complete learning package with video lessons, solved exercises, and course materials."
-          onPress={() => setShowFormModal(true)}
+          onPress={handleStartLearning}
         />
         
         <FeatureGrid />
