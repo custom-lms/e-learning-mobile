@@ -52,13 +52,17 @@ export default function MyCoursesScreen({ navigation }) {
             })
           }
         >
-          <Image
+          {/* <Image
             source={{ uri: item.class?.thumbnail || "https://via.placeholder.com/150" }}
+            style={styles.thumbnail}
+          /> */}
+          <Image
+            source={require('../assets/java-course.jpg')} 
             style={styles.thumbnail}
           />
           <View style={styles.textContainer}>
             <Text style={styles.title}>{item.class?.name}</Text>
-            <Text style={styles.subtitle}>{item.class?.description || "Purchased course"}</Text>
+            <Text style={styles.subtitle}>{"Course description here.."}</Text>
           </View>
         </TouchableOpacity>
       )}
@@ -82,6 +86,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 10,
+    objectFit: 'contain',
   },
   textContainer: {
     flex: 1,
