@@ -1,94 +1,108 @@
-// MyCoursesScreen.js
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet } from 'react-native';
+// MyCoursesScreen.jsx
+import React, { useEffect, useState, useContext } from "react";
+import { View, Text, FlatList, ActivityIndicator, TouchableOpacity, Image, StyleSheet } from "react-native";
+import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
+import BASE_URL from "../config/config";
 
-// Dummy course data (replace later with real API response)
-const dummyCourses = [
-  {
-    id: 1,
-    title: 'Class 7 - SEBA Board',
-    description: 'Includes all subjects with Assamese medium',
-  },
-  {
-    id: 2,
-    title: 'Class 8 - JB Board',
-    description: 'Covers full syllabus with video lessons',
-  },
-  // ❌ To test empty state, just set dummyCourses to []
-];
-
-const CourseCard = ({ title, description }) => (
-  <View style={styles.card}>
-    <Text style={styles.cardTitle}>{title}</Text>
-    <Text style={styles.cardDescription}>{description}</Text>
-  </View>
-);
-
-export default function MyCoursesScreen() {
-  const [purchasedCourses, setPurchasedCourses] = useState([]);
+export default function MyCoursesScreen({ navigation }) {
+  const { user } = useContext(AuthContext);
+  const [myCourses, setMyCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate API call delay
-    setTimeout(() => {
-      setPurchasedCourses(dummyCourses); // change to [] to simulate empty state
-    }, 1000);
-  }, []);
+    if (user?.email) fetchUserCourses();
+  }, [user]);
+
+  const fetchUserCourses = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/orders/user/${user.email}`);
+      setMyCourses(res.data);
+    } catch (err) {
+      console.error("Error fetching courses:", err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#00dc82" style={{ marginTop: 50 }} />;
+  }
+
+  if (myCourses.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>You have not enrolled in any courses yet.</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>My Courses</Text>
-
-      {purchasedCourses.length === 0 ? (
-        <Text style={styles.emptyMessage}>Your course list is empty.</Text>
-      ) : (
-        <FlatList
-          data={purchasedCourses}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <CourseCard title={item.title} description={item.description} />
-          )}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
+    <FlatList
+      data={myCourses}
+      keyExtractor={(item) => item.id.toString()}
+      contentContainerStyle={styles.listContainer}
+      renderItem={({ item }) => (
+        <TouchableOpacity
+          style={styles.courseCard}
+          onPress={() =>
+            navigation.navigate("ClassDetails", {
+              classId: item.classId,
+              className: item.class?.name || "Your Course",
+            })
+          }
+        >
+          <Image
+            source={{ uri: item.class?.thumbnail || "https://via.placeholder.com/150" }}
+            style={styles.thumbnail}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{item.class?.name}</Text>
+            <Text style={styles.subtitle}>{item.class?.description || "Purchased course"}</Text>
+          </View>
+        </TouchableOpacity>
       )}
-    </View>
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    flex: 1,
-    backgroundColor: '#fff',
+  listContainer: {
+    padding: 15,
   },
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  emptyMessage: {
-    fontSize: 16,
-    color: '#888',
-    marginTop: 40,
-    textAlign: 'center',
-  },
-  card: {
-    backgroundColor: '#f3f3f3',
-    padding: 16,
+  courseCard: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
     borderRadius: 10,
-    marginBottom: 12,
-    elevation: 3, // Android shadow
-    shadowColor: '#000', // iOS shadow
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
+    marginBottom: 15,
+    elevation: 3,
+    padding: 10,
   },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 6,
+  thumbnail: {
+    width: 90,
+    height: 90,
+    borderRadius: 10,
   },
-  cardDescription: {
-    fontSize: 14,
-    color: '#555',
+  textContainer: {
+    flex: 1,
+    paddingLeft: 12,
+    justifyContent: "center",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  subtitle: {
+    color: "#777",
+    marginTop: 5,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    color: "#555",
+    fontSize: 16,
   },
 });
